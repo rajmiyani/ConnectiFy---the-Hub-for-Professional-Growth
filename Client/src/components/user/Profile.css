@@ -1,0 +1,605 @@
+:root {
+    --brand-corporate: rgb(0, 115, 177);
+    --accent: #00a0dc;
+    --muted: #6c757d;
+    --bg: #f4f7fb;
+    --card: #ffffff;
+}
+
+.pf-page {
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #111827;
+}
+
+/* COVER */
+.pf-cover {
+    height: 280px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+}
+
+/* cover controls (top-right) */
+.pf-cover-controls {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pf-btn {
+    background: var(--card);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.06);
+    font-weight: 600;
+}
+
+.pf-btn.small {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+}
+
+.pf-btn.ghost {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.pf-btn.primary {
+    background: linear-gradient(90deg, var(--brand-corporate), var(--accent));
+    color: #fff;
+}
+
+/* Avatar */
+.pf-avatar-wrap {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pf-avatar {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    overflow: visible;
+}
+
+.pf-avatar img {
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 6px solid #fff;
+    box-shadow: 0 8px 30px rgba(2, 6, 23, 0.12);
+}
+
+.pf-avatar-fallback {
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #e8f4ff, #dff6ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--brand-corporate);
+    border: 6px solid #fff;
+}
+
+.pf-avatar-edit {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    background: #fff;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+}
+
+/* main layout */
+.pf-main {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+    padding: 80px 48px 60px;
+    align-items: start;
+}
+
+.pf-left {
+    position: sticky;
+    top: 24px;
+    height: fit-content;
+}
+
+.card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(12, 22, 40, 0.03);
+    border: 1px solid rgba(12, 22, 40, 0.04);
+    margin-bottom: 18px;
+}
+
+.glass {
+    backdrop-filter: blur(6px);
+}
+
+/* left card content */
+.name {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.location {
+    color: var(--brand-corporate);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+}
+
+.skill-pill {
+    background: linear-gradient(135deg, #eaf7ff, #f0fbff);
+    padding: 6px 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    font-weight: 600;
+    position: relative;
+}
+
+.skill-remove {
+    background: transparent;
+    border: none;
+    margin-left: 6px;
+    color: #c0392b;
+    cursor: pointer;
+    padding: 2px;
+    font-size: 0.8rem;
+}
+
+.add-skill {
+    border: 1px dashed rgba(0, 0, 0, 0.06);
+    background: transparent;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* actions */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.action {
+    text-align: left;
+    background: #f6fbff;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Right area styles */
+.pf-right {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.btn-link {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--brand-corporate);
+    font-size: 1rem;
+}
+
+/* list item */
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.04);
+    align-items: flex-start;
+}
+
+.li-left h5 {
+    margin: 0;
+}
+
+.li-left .small {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+.li-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.list-item-sm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 4px;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.04);
+}
+
+/* two-grid */
+.two-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* PREMIUM MODAL */
+.pf-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 10, 30, 0.4);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    animation: fadeInBg 0.3s ease;
+}
+
+@keyframes fadeInBg {
+    from {
+        background: rgba(0, 10, 30, 0);
+        backdrop-filter: blur(0px);
+    }
+
+    to {
+        background: rgba(0, 10, 30, 0.4);
+        backdrop-filter: blur(8px);
+    }
+}
+
+.pf-modal {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px) scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.pf-modal-head {
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.pf-modal-head h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brand-corporate);
+    text-transform: capitalize;
+}
+
+.pf-modal-body {
+    padding: 28px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for Modal Body */
+.pf-modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.pf-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.pf-modal-foot {
+    padding: 20px 28px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: #fcfdfe;
+}
+
+.pf-close {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* LEGACY MODAL OVERLAYS (Removing redundant ones) */
+.mc-overlay,
+.modal-overlay,
+.custom-modal-overlay {
+    display: none !important;
+}
+
+.label {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pf-modal input[type="text"],
+.pf-modal input[type="number"],
+.pf-modal select,
+.pf-modal textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.pf-modal input:focus,
+.pf-modal select:focus,
+.pf-modal textarea:focus {
+    outline: none;
+    border-color: var(--brand-corporate);
+    box-shadow: 0 0 0 4px rgba(0, 115, 177, 0.1);
+}
+
+.skill-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    list-style: none;
+    padding: 8px;
+    margin-top: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+}
+
+.skill-dropdown li {
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.skill-dropdown li:hover {
+    background: #f0f7ff;
+    color: var(--brand-corporate);
+}
+
+.custom-modal input,
+.custom-modal select,
+.custom-modal textarea {
+    border-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* URL Input Group Styling */
+.url-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.url-input-icon {
+    position: absolute;
+    left: 14px;
+    color: #6b7280;
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 1;
+    transition: color 0.2s;
+}
+
+.url-input-group input[type="url"] {
+    padding-left: 44px !important;
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    margin-bottom: 0;
+}
+
+.url-input-group input[type="url"]:focus {
+    outline: none;
+    border-color: var(--brand-corporate);
+    box-shadow: 0 0 0 4px rgba(0, 115, 177, 0.1);
+}
+
+.url-input-group input[type="url"]:focus+.url-input-icon {
+    color: var(--brand-corporate);
+}
+
+.url-input-group.linkedin .url-input-icon {
+    color: #0077b5;
+}
+
+.url-input-group.linkedin input[type="url"]:focus+.url-input-icon {
+    color: #005582;
+}
+
+/* Resume Upload Styles */
+.resume-upload-zone {
+    border: 2px dashed #3b82f6;
+    border-radius: 16px;
+    padding: 40px 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(59, 130, 246, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.resume-upload-zone:hover {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+.resume-icon-main {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #3b82f6;
+}
+
+.resume-success-preview {
+    color: #166534;
+    animation: fadeInModal 0.5s ease-out;
+}
+
+.resume-icon-badge {
+    background: #dcfce7;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+}
+
+.resume-icon-badge-blue {
+    background: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.resume-prompt {
+    animation: fadeInModal 0.5s ease-out;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Icon badge for Performance Modal */
+.icon-badge-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 115, 177, 0.1);
+    color: var(--brand-corporate);
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+}

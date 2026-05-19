@@ -1,0 +1,593 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  user
+  employee
+  company
+  admin
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum ProfileVisibility {
+  public
+  private
+}
+
+model User {
+  id          String      @id @default(uuid())
+  accountType AccountType @default(user)
+
+  firstName String
+  lastName  String
+  username  String @unique
+  email     String @unique
+
+  phone  String?
+  dob    DateTime?
+  gender Gender?
+
+  headline String?
+  bio      String?
+
+  // Education Details
+  educationLevel   String?
+  university       String?
+  courseName       String?
+  startYear        String?
+  passingYear      String?
+  cgpa             String?
+  interest         String?
+  currentEducation Boolean? @default(false)
+
+  // Professional & Links
+  occupation String?
+  lookingFor String?
+  linkedin   String?
+  portfolio  String?
+  resume     String? // Path/URL to resume
+
+  country String?
+  state   String?
+  city    String?
+
+  password String
+  pin      String?
+
+  profileImg        String?
+  coverPhoto        String?
+  profileVisibility ProfileVisibility @default(public)
+
+  refreshTokens String[]
+  isVerified    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+
+  connections  Int @default(0)
+  profileViews Int @default(0)
+
+  // Relations
+  experiences  Experience[]
+  education    EducationDetail[]
+  certificates Certificate[]
+  awards       Award[]
+  posts        Post[]
+  events       Event[]
+
+  // Interaction Relations
+  likes            Like[]
+  comments         Comment[]
+  savedPosts       SavedPost[]
+  sentRequests     Connection[] @relation("SentConnections")
+  receivedRequests Connection[] @relation("ReceivedConnections")
+
+  notifications     Notification[] @relation("UserNotifications")
+  sentNotifications Notification[] @relation("UserSentNotifications")
+
+  // Job Relations
+  jobs         Job[]
+  savedJobs    SavedJob[]
+  applications Application[]
+
+  // Messaging Relations
+  conversations Conversation[]
+  messages      Message[]
+
+  skills            String?
+  skillsRelation    UserSkill[]
+  endorsements      Endorsement[] @relation("EndorsedUser")
+  givenEndorsements Endorsement[] @relation("Endorser")
+
+  ownedGroups Group[] @relation("GroupOwner")
+  groups      Group[] @relation("GroupMembers")
+
+  sentRecommendations     Recommendation[] @relation("SentRecommendations")
+  receivedRecommendations Recommendation[] @relation("ReceivedRecommendations")
+
+  reports SentReport[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Settings
+  notificationPrefs Json?    @default("{\"email\": true, \"push\": true, \"marketing\": false}")
+  privacySettings   Json?    @default("{\"profileVisibility\": \"public\", \"showStatus\": true}")
+  twoFactorEnabled  Boolean? @default(false)
+  activityStatus    Boolean? @default(true)
+
+  @@map("users")
+}
+
+model Company {
+  id          String  @id @default(uuid())
+  companyName String
+  email       String  @unique
+  phone       String?
+  website     String?
+  industry    String
+  companySize String?
+  foundedYear String?
+
+  recruiterName  String
+  recruiterEmail String
+  recruiterPhone String
+  recruiterRole  String?
+
+  country String
+  state   String
+  city    String
+  pincode String?
+  address String
+
+  password      String
+  profileImg    String?
+  coverPhoto    String?
+  refreshTokens String[]
+  isVerified    Boolean  @default(false)
+
+  isActive Boolean @default(true)
+
+  tagline   String?
+  about     String?
+  mission   String?
+  vision    String?
+  services  String?
+  techStack String?
+
+  jobs              Job[]
+  conversations     Conversation[]
+  messages          Message[]
+  notifications     Notification[] @relation("CompanyNotifications")
+  sentNotifications Notification[] @relation("CompanySentNotifications")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Settings
+  notificationPrefs Json?    @default("{\"email\": true, \"push\": true, \"marketing\": false}")
+  privacySettings   Json?    @default("{\"profileVisibility\": \"public\", \"showStatus\": true}")
+  twoFactorEnabled  Boolean? @default(false)
+  activityStatus    Boolean? @default(true)
+
+  @@map("companies")
+}
+
+model Conversation {
+  id           String    @id @default(uuid())
+  participants User[]
+  companies    Company[]
+  messages     Message[]
+  lastMessage  String?
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  senderId   String // Legacy/Logic
+  senderType AccountType @default(user)
+
+  // Explicit relations
+  senderUser      User?    @relation(fields: [senderUserId], references: [id])
+  senderUserId    String?
+  senderCompany   Company? @relation(fields: [senderCompanyId], references: [id])
+  senderCompanyId String?
+
+  content   String
+  mediaUrl  String?
+  mediaType String? // "image", "pdf"
+  createdAt DateTime @default(now())
+
+  @@map("messages")
+}
+
+model Post {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content        String?
+  mediaType      String? // "image", "video", "article"
+  mediaUrls      String[] // Array of URLs for images/videos
+  title          String? // For articles
+  articleContent String? // For articles
+
+  // Interaction Relations
+  likes    Like[]
+  comments Comment[]
+  savedBy  SavedPost[]
+  reports  Report[]
+  groupId  String?
+  group    Group?      @relation(fields: [groupId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+
+  @@map("posts")
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Connection {
+  id         String           @id @default(uuid())
+  senderId   String
+  receiverId String
+  status     ConnectionStatus @default(PENDING)
+
+  sender   User @relation("SentConnections", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedConnections", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([senderId, receiverId])
+  @@map("connections")
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  content   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model SavedPost {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@map("saved_posts")
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  date        DateTime
+  location    String?
+  mediaUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Experience {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        String
+  company     String
+  duration    String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("experiences")
+}
+
+model EducationDetail {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution String
+  degree      String?
+  year        String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("education_details")
+}
+
+model Certificate {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  issuer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("certificates")
+}
+
+model Award {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("awards")
+}
+
+enum NotificationType {
+  REQUEST
+  ACCEPT
+  LIKE
+  COMMENT
+  MENTION
+  SYSTEM
+  ALERT
+}
+
+model Notification {
+  id            String      @id @default(uuid())
+  recipientId   String // Generic recipient ID
+  recipientType AccountType @default(user)
+
+  senderId   String? // Generic sender ID
+  senderType AccountType?
+
+  type      NotificationType
+  content   String
+  postId    String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  // Specific relations
+  recipientUser      User?    @relation("UserNotifications", fields: [recipientUserId], references: [id], onDelete: Cascade)
+  recipientUserId    String?
+  recipientCompany   Company? @relation("CompanyNotifications", fields: [recipientCompanyId], references: [id], onDelete: Cascade)
+  recipientCompanyId String?
+
+  senderUser      User?    @relation("UserSentNotifications", fields: [senderUserId], references: [id], onDelete: SetNull)
+  senderUserId    String?
+  senderCompany   Company? @relation("CompanySentNotifications", fields: [senderCompanyId], references: [id], onDelete: SetNull)
+  senderCompanyId String?
+
+  @@map("notifications")
+}
+
+model Job {
+  id            String    @id @default(uuid())
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId     String?
+  company       Company?  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title         String
+  companyName   String?
+  location      String
+  type          String    @default("Full-time") // "Full-time", "Part-time", "Contract", "Internship"
+  workMode      String?   @default("Onsite") // "Onsite", "Remote", "Hybrid"
+  experience    String?
+  salary        String?
+  openings      Int?      @default(1)
+  applyDeadline DateTime?
+  skills        String?
+  description   String?
+  benefits      String?
+  status        String    @default("Active") // "Active", "Draft", "Closed"
+  logo          String?
+
+  savedBy      SavedJob[]
+  applications Application[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("jobs")
+}
+
+model SavedJob {
+  id        String   @id @default(uuid())
+  userId    String
+  jobId     String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+  @@map("saved_jobs")
+}
+
+enum ApplicationStatus {
+  PENDING
+  SHORTLISTED
+  INTERVIEW_SCHEDULED
+  HIRED
+  REJECTED
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  jobId       String
+  userId      String
+  resumeUrl   String?
+  fullName    String?
+  email       String?
+  phone       String?
+  coverLetter String?
+  status      ApplicationStatus @default(PENDING)
+
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  interviews Interview[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([jobId, userId])
+  @@map("applications")
+}
+
+model Interview {
+  id            String   @id @default(uuid())
+  applicationId String
+  scheduledAt   DateTime
+  type          String   @default("Online") // "Online", "In-person"
+  location      String? // Meeting link or physical address
+  notes         String?
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("interviews")
+}
+
+model Skill {
+  id           String        @id @default(uuid())
+  name         String        @unique
+  category     String?
+  users        UserSkill[]
+  endorsements Endorsement[]
+
+  @@map("skills")
+}
+
+model UserSkill {
+  userId  String
+  skillId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+  @@map("user_skills")
+}
+
+model Endorsement {
+  id         String   @id @default(uuid())
+  skillId    String
+  skill      Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  userId     String // User being endorsed
+  user       User     @relation("EndorsedUser", fields: [userId], references: [id], onDelete: Cascade)
+  endorserId String // User who endorses
+  endorser   User     @relation("Endorser", fields: [endorserId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@map("endorsements")
+}
+
+model Group {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  owner       User     @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     User[]   @relation("GroupMembers")
+  posts       Post[]
+  isPrivate   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("groups")
+}
+
+model Recommendation {
+  id         String   @id @default(uuid())
+  content    String
+  giverId    String
+  giver      User     @relation("SentRecommendations", fields: [giverId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("ReceivedRecommendations", fields: [receiverId], references: [id], onDelete: Cascade)
+  status     String   @default("PENDING") // PENDING, ACCEPTED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("recommendations")
+}
+
+enum ReportTargetType {
+  POST
+  USER
+  COMMENT
+}
+
+model Report {
+  id         String           @id @default(uuid())
+  reporterId String
+  targetId   String
+  targetType ReportTargetType
+  reason     String
+  status     String           @default("PENDING") // PENDING, RESOLVED, DISMISSED
+
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String?
+
+  reports SentReport[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reports")
+}
+
+model SentReport {
+  id         String @id @default(uuid())
+  reporterId String
+  reporter   User   @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reportId   String
+  report     Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("sent_reports")
+}

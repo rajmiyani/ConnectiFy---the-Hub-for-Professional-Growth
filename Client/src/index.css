@@ -1,0 +1,175 @@
+:root {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --text-primary: #1c1e21;
+    --text-secondary: #65676b;
+    --border-color: #e5e7eb;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --primary-color: rgb(0, 115, 177);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --text-primary: #e4e6eb;
+    --text-secondary: #b0b3b8;
+    --border-color: #2f3336;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --primary-color: #3b82f6;
+    --glass-bg: rgba(30, 30, 30, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Global Card & Component Overrides for Dark Mode Compatibility */
+.bg-white {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+.text-dark {
+    color: var(--text-primary) !important;
+}
+
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.card,
+.glass {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Ensure navbar respects theme */
+.navbar,
+.navbar-light {
+    background-color: var(--bg-secondary) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+.dropdown-menu {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Form inputs */
+.form-control {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.form-control:focus {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--primary-color);
+}
+
+/* ================= UNIQUE "AURA FLOW" LOADING EFFECT ================= */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: #f0f6fa;
+    /* Ultra-light blue base */
+    border-radius: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* The sweeping aura beam */
+.skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(110deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.4) 45%,
+            rgba(255, 255, 255, 0.7) 50%,
+            rgba(255, 255, 255, 0.4) 55%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-100%) skewX(-20deg);
+    animation: aura-flow 2.2s infinite cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Background pulse for depth */
+.skeleton-pulse {
+    animation: aura-pulse 2s infinite ease-in-out;
+}
+
+@keyframes aura-flow {
+    0% {
+        transform: translateX(-150%) skewX(-20deg);
+    }
+
+    50% {
+        transform: translateX(50%) skewX(-20deg);
+    }
+
+    100% {
+        transform: translateX(150%) skewX(-20deg);
+    }
+}
+
+@keyframes aura-pulse {
+
+    0%,
+    100% {
+        background-color: #f0f6fa;
+    }
+
+    50% {
+        background-color: #e2eef7;
+    }
+}
+
+/* Placeholder Shapes */
+.skeleton-text {
+    height: 12px;
+    width: 100%;
+    margin-bottom: 8px;
+    border-radius: 6px;
+}
+
+.skeleton-title {
+    height: 20px;
+    width: 65%;
+    margin-bottom: 14px;
+    border-radius: 8px;
+}
+
+.skeleton-circle {
+    border-radius: 50%;
+}
+
+.skeleton-btn {
+    height: 36px;
+    width: 100px;
+    border-radius: 12px;
+}
+
+.skeleton-rect {
+    height: 48px;
+    width: 100%;
+    border-radius: 12px;
+}

@@ -1,0 +1,30 @@
+/* Ensure full height layout */
+.home-container {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+/* Sidebars remain fixed while page scrolls */
+.sidebar-section,
+.right-sidebar-section {
+  position: sticky;
+  top: 80px; /* Offset for Header height */
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: none; /* hide scrollbar for Firefox */
+}
+
+/* Hide scrollbar in Chrome/Safari/Edge */
+.sidebar-section::-webkit-scrollbar,
+.right-sidebar-section::-webkit-scrollbar {
+  display: none;
+}
+
+/* Middle section scroll area */
+.center-section {
+  min-height: 100vh;
+}
+
+.scroll-container {
+  padding-bottom: 100px;
+}

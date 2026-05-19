@@ -1,0 +1,30 @@
+# Dependency directories
+node_modules/
+Client/node_modules/
+Server/node_modules/
+
+# Production builds
+dist/
+Server/dist/
+Client/dist/
+Client/dist-ssr/
+
+# Environment files
+.env
+Server/.env
+
+# Log files
+*.log
+Server/seed_error.log
+Server/seed_output.log
+
+# Local files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

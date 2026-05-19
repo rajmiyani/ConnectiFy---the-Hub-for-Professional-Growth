@@ -1,0 +1,149 @@
+# ConnectiFy Expanded ER Diagram
+
+This diagram expands upon the original design by incorporating existing features from the Prisma schema and adding advanced professional networking functionalities like Skills, Endorsements, Recommendations, and Moderation.
+
+## Chen's Notation Visual Flow
+
+```mermaid
+flowchart TD
+    %% Entities
+    User[Rectangle: USER]
+    Company[Rectangle: COMPANY]
+    Job[Rectangle: JOB]
+    Post[Rectangle: POST]
+    App[Rectangle: APPLICATION]
+    Inter[Rectangle: INTERVIEW]
+    Skill[Rectangle: SKILL]
+    Group[Rectangle: GROUP]
+    Notif[Rectangle: NOTIFICATION]
+    Message[Rectangle: MESSAGE]
+    Conv[Rectangle: CONVERSATION]
+    Recommend[Rectangle: RECOMMENDATION]
+    Report[Rectangle: REPORT]
+
+    %% Attributes for USER (Selected)
+    U_Id((Oval: Id)) --- User
+    U_Email((Oval: Email)) --- User
+    U_Name((Oval: Name)) --- User
+    U_Type((Oval: User_Type)) --- User
+    
+    %% Attributes for COMPANY (Selected)
+    C_Id((Oval: Id)) --- Company
+    C_Name((Oval: Name)) --- Company
+    C_Ind((Oval: Industry)) --- Company
+
+    %% Relationships
+    U_Has_C{Diamond: HAS LOGIN} --- User
+    U_Has_C --- Company
+
+    C_Creates_J{Diamond: CREATES} --- Company
+    C_Creates_J --- Job
+
+    U_Posts_P{Diamond: POSTS} --- User
+    U_Posts_P --- Post
+
+    U_Applies_A{Diamond: APPLIES} --- User
+    U_Applies_A --- App
+    
+    J_Receives_A{Diamond: RECEIVES} --- Job
+    J_Receives_A --- App
+
+    A_Has_I{Diamond: SCHEDULES} --- App
+    A_Has_I --- Inter
+
+    U_Has_S{Diamond: POSSESSES} --- User
+    U_Has_S --- Skill
+
+    U_Endorses_S{Diamond: ENDORSES} --- User
+    U_Endorses_S --- Skill
+
+    U_Joins_G{Diamond: JOINS} --- User
+    U_Joins_G --- Group
+
+    U_Recommends_U{Diamond: RECOMMENDS} --- User
+    U_Recommends_U --- Recommend
+    Recommend --- User
+
+    U_Reports_X{Diamond: REPORTS} --- User
+    U_Reports_X --- Report
+    Report --- Post
+    Report --- User
+
+    U_Starts_C{Diamond: PARTICIPATES} --- User
+    U_Starts_C --- Conv
+    
+    C_Starts_C{Diamond: PARTICIPATES} --- Company
+    C_Starts_C --- Conv
+
+    Conv_Has_M{Diamond: CONTAINS} --- Conv
+    Conv_Has_M --- Message
+
+    U_Receives_N{Diamond: RECEIVES} --- User
+    U_Receives_N --- Notif
+
+    %% Styling
+    style User fill:#e1f5fe,stroke:#01579b
+    style Company fill:#e8f5e9,stroke:#1b5e20
+    style Job fill:#fff3e0,stroke:#e65100
+    style Post fill:#f3e5f5,stroke:#4a148c
+    style App fill:#fce4ec,stroke:#880e4f
+    style Skill fill:#e0f2f1,stroke:#004d40
+    style Group fill:#f1f8e9,stroke:#33691e
+```
+
+## Key Feature Enhancements
+
+1.  **Professional Growth**: Added `SKILL` and `ENDORSES` to allow users to build credibility.
+2.  **Community Engagement**: Added `GROUP` to allow niche networking.
+3.  **Trust & Safety**: Added `RECOMMENDATION` for formal feedback and `REPORT` for admin-level moderation.
+4.  **Recruitment Pipeline**: Expanded `APPLICATION` to include `INTERVIEW` scheduling (already reflected in your schema).
+5.  **Activity Tracking**: Included `NOTIFICATION` and formal `CONVERSATION` management.
+
+---
+
+### Suggested Schema Updates (Prisma)
+
+To implement the "Best" version, I recommend adding these models to your [schema.prisma](file:///e:/College%20Project/Sem%206%20Projects/ConnectiFy/Server/src/prisma/schema.prisma):
+
+```prisma
+model Skill {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  category    String?
+  users       User[]       // Implicit many-to-many
+  endorsements Endorsement[]
+}
+
+model Endorsement {
+  id          String   @id @default(uuid())
+  skillId     String
+  skill       Skill    @relation(fields: [skillId], references: [id])
+  userId      String   // User being endorsed
+  user        User     @relation("EndorsedUser", fields: [userId], references: [id])
+  endorserId  String   // User who endorses
+  endorser    User     @relation("Endorser", fields: [endorserId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Group {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  owner       User     @relation("GroupOwner", fields: [ownerId], references: [id])
+  members     User[]   @relation("GroupMembers")
+  posts       Post[]
+  createdAt   DateTime @default(now())
+}
+
+model Recommendation {
+  id          String   @id @default(uuid())
+  content     String
+  giverId     String
+  giver       User     @relation("SentRecommendations", fields: [giverId], references: [id])
+  receiverId  String
+  receiver    User     @relation("ReceivedRecommendations", fields: [receiverId], references: [id])
+  status      String   @default("PENDING") // PENDING, ACCEPTED
+  createdAt   DateTime @default(now())
+}
+```
