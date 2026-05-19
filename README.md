@@ -1,5 +1,7 @@
 # 🌐 ConnectiFy — The Hub for Professional Growth
 
+> 🎓 **Final Year Major Project** | Developed as a production-grade professional networking ecosystem highlighting advanced software engineering patterns, real-time systems, and AI-driven workflows.
+
 [![React](https://img.shields.io/badge/Frontend-React%2019-blue?logo=react&logoColor=white)](https://react.dev/)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js-green?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/Server-TypeScript-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -9,7 +11,17 @@
 [![Socket.io](https://img.shields.io/badge/Realtime-Socket.io-black?logo=socket.io&logoColor=white)](https://socket.io/)
 [![Google Gemini](https://img.shields.io/badge/AI-Gemini%20Pro-purple?logo=googlegemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
 
-**ConnectiFy** is a feature-rich, high-performance, full-stack professional networking platform similar to LinkedIn. Designed for modern professional ecosystems, it seamlessly connects users, companies, and platform administrators. Built with a robust technical stack including a **React 19** frontend, **Node.js/TypeScript** backend, **PostgreSQL** database managed by **Prisma**, **Redis/BullMQ** for asynchronous job processing, and **Socket.io** alongside **WebRTC** for real-time video interview rooms and instant messaging.
+## 📝 Project Description
+
+**ConnectiFy** is a comprehensive, production-ready professional networking and career platform developed as a **Final Year Major Project**. Formulated to mirror and expand upon industry-leading professional ecosystems like LinkedIn, ConnectiFy serves as an all-in-one portal facilitating three distinct interfaces: **Job Seekers (Users)**, **Recruiters (Companies)**, and **Supervisors (Platform Administrators)**.
+
+### 🎯 Key Engineering Challenges Addressed:
+1. **Real-time Event-Driven Communication**: Utilizing **Socket.io** to drive instant messaging, platform notifications, and WebRTC signaling for face-to-face mock and recruiter interviews.
+2. **Asynchronous Background Processing**: Implementing a robust message queue leveraging **Redis** and **BullMQ** to offload long-running tasks such as automated transactional emails (verification, applications, scheduling alerts), maintaining low API response latencies.
+3. **Data Integrity & Type-Safe Operations**: Designing a highly structured, relational **PostgreSQL** schema using **Prisma ORM** alongside a pure **TypeScript** backend compiler to enforce strict schemas, relationships, and data reliability.
+4. **AI-Empowered Utilities**: Integrating the **Google Gemini Pro API** to power an automated AI Doubt Solver (technical/professional advice) and a dynamic Daily Quiz generator to facilitate constant skill enhancement for job seekers.
+
+This project is a culmination of full-stack engineering disciplines including reactive UI state management, real-time socket orchestration, background processing, advanced database design, and machine learning/AI application layers.
 
 ---
 
